@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Crown Formula — Mobile Barbering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== ROOT & RESET ===== */
+:root {
+  --black: #0A0A0A;
+  --dark: #111111;
+  --card: #161616;
+  --card2: #1A1A1A;
+  --border: rgba(255,255,255,0.08);
+  --gold: #C9A84C;
+  --gold2: #E8C96D;
+  --red: #B3212B;
+  --white: #FFFFFF;
+  --off-white: #F5F0E8;
+  --muted: #888888;
+  --muted2: #AAAAAA;
+  --radius: 12px;
+  --radius-lg: 20px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 800; line-height: 1.1; }
+a { color: inherit; text-decoration: none; }
+img { display: block; width: 100%; object-fit: cover; }
+ul { list-style: none; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+.section { padding: 6rem 0; }
+
+/* ===== LABEL & HEADING STYLES ===== */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .5rem;
+  color: var(--gold); font-size: .72rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+.eyebrow::before {
+  content: ''; display: block; width: 28px; height: 1.5px; background: var(--gold);
+}
+.section-title { font-size: clamp(2rem, 4vw, 3rem); color: var(--white); margin-bottom: 1rem; }
+.section-sub { color: var(--muted2); font-size: 1rem; max-width: 520px; font-weight: 300; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .9rem 2rem; border-radius: 50px;
+  font-weight: 700; font-size: .88rem; font-family: 'Inter', sans-serif;
+  cursor: pointer; border: none; transition: all .25s ease; letter-spacing: .04em;
+}
+.btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #000; }
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,.35); }
+.btn-outline { background: transparent; border: 1.5px solid rgba(255,255,255,.25); color: var(--white); }
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+.btn-red { background: var(--red); color: #fff; }
+.btn-red:hover { background: #8f1a22; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(179,33,43,.35); }
+.btn-sm { padding: .65rem 1.4rem; font-size: .82rem; border-radius: 50px; }
+.btn-full { width: 100%; justify-content: center; border-radius: 8px; padding: .85rem 1.5rem; }
+
+/* ===== NAVBAR ===== */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding-top: env(safe-area-inset-top, 0px);
+  transition: background .3s ease, box-shadow .3s ease;
+}
+header.scrolled {
+  background: rgba(10,10,10,.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 var(--border);
+}
+.navrow {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 76px;
+}
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900; font-size: 1rem; letter-spacing: .06em;
+  display: flex; align-items: center; gap: .5rem;
+}
+.brand-crown {
+  display: flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px; flex-shrink: 0;
+}
+.brand-crown img {
+  width: 100%; height: 100%; object-fit: contain;
+  mix-blend-mode: lighten;
+  filter: drop-shadow(0 0 8px rgba(201,168,76,.5));
+  transition: filter .3s ease;
+}
+.brand-crown img:hover {
+  filter: drop-shadow(0 0 14px rgba(201,168,76,.8));
+}
+.burger-icon { display: flex; flex-direction: column; gap: 4px; pointer-events: none; }
+.burger-icon span { display: block; width: 18px; height: 2px; background: currentColor; border-radius: 2px; transition: background .2s; }
+.brand span { color: var(--muted); font-weight: 300; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; display: block; }
+.navlinks { display: none; gap: 2.2rem; font-weight: 500; font-size: .86rem; letter-spacing: .02em; }
+.navlinks a { color: var(--muted2); transition: color .2s; }
+.navlinks a:hover { color: var(--gold); }
+.navcta { display: none; }
+.burger {
+  background: none; border: 1.5px solid var(--border); border-radius: 8px;
+  color: var(--white); font-size: .88rem; padding: .45rem .8rem; cursor: pointer;
+  font-family: inherit; font-weight: 600; transition: border-color .2s;
+}
+.burger:hover { border-color: var(--gold); color: var(--gold); }
+.mobmenu {
+  display: none; flex-direction: column; gap: .2rem;
+  padding: 1rem 1.5rem 1.5rem;
+  background: rgba(10,10,10,.98);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+}
+.mobmenu.open { display: flex; }
+.mobmenu a {
+  padding: .85rem 0; font-size: .96rem; font-weight: 500; color: var(--muted2);
+  border-bottom: 1px solid var(--border); transition: color .2s;
+}
+.mobmenu a:last-child { border-bottom: none; }
+.mobmenu a:hover { color: var(--gold); }
+@media(min-width:900px) {
+  .navlinks { display: flex; }
+  .navcta { display: inline-flex; }
+  .burger { display: none; }
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-bg img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: center top;
+  filter: brightness(.55) saturate(1.1);
+}
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(135deg,
+    rgba(10,10,10,.75) 0%,
+    rgba(10,10,10,.25) 55%,
+    rgba(201,168,76,.05) 100%);
+}
+.hero-grain {
+  position: absolute; inset: 0; z-index: 1; opacity: .03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 10rem 0 5rem;
+  max-width: 720px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: rgba(201,168,76,.12); border: 1px solid rgba(201,168,76,.3);
+  padding: .4rem 1rem .4rem .7rem;
+  border-radius: 50px; font-size: .75rem; font-weight: 600; color: var(--gold);
+  margin-bottom: 1.8rem; letter-spacing: .05em;
+}
+.hero-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+.hero h1 {
+  font-size: clamp(2.6rem, 6.5vw, 5rem);
+  color: var(--white); line-height: 1.05;
+  margin-bottom: 1.4rem;
+}
+.hero h1 em { color: var(--gold); font-style: italic; }
+.hero-sub {
+  color: rgba(255,255,255,.7); font-size: 1.08rem; font-weight: 300;
+  max-width: 520px; margin-bottom: 2.4rem; line-height: 1.75;
+}
+.hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 3.5rem; }
+.hero-stats {
+  display: flex; gap: 2.5rem; flex-wrap: wrap;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+.hero-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; font-weight: 800; color: var(--gold);
+  line-height: 1;
+}
+.hero-stat-lbl { color: var(--muted); font-size: .78rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; margin-top: .25rem; }
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  color: var(--muted); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+}
+.hero-scroll-line {
+  width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollLine 2s ease infinite;
+}
+@keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+/* ===== MARQUEE STRIP ===== */
+.marquee-strip {
+  background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+  padding: .75rem 0; overflow: hidden;
+}
+.marquee-track {
+  display: flex; gap: 0; white-space: nowrap;
+  animation: marquee 20s linear infinite;
+}
+.marquee-track span {
+  color: #000; font-weight: 700; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+  padding: 0 2rem;
+}
+.marquee-track span.dot { padding: 0; font-size: .6rem; opacity: .4; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ===== HOW IT WORKS ===== */
+.how-wrap {
+  display: grid; gap: 2rem;
+  grid-template-columns: 1fr;
+}
+@media(min-width:768px) { .how-wrap { grid-template-columns: repeat(3, 1fr); } }
+.how-card {
+  position: relative; padding: 2.2rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform .3s, border-color .3s;
+}
+.how-card:hover { transform: translateY(-6px); border-color: rgba(201,168,76,.3); }
+.how-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem; font-weight: 900; line-height: 1;
+  color: rgba(201,168,76,.08);
+  position: absolute; top: 1rem; right: 1.5rem;
+}
+.how-icon {
+  width: 100%; height: 180px;
+  border-radius: 12px; overflow: hidden;
+  margin-bottom: 1.4rem; position: relative;
+}
+.how-icon img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(.75) saturate(1.1);
+  transition: transform .4s ease, filter .4s ease;
+}
+.how-card:hover .how-icon img { transform: scale(1.05); filter: brightness(.9) saturate(1.2); }
+.how-icon-num {
+  position: absolute; bottom: .7rem; left: .9rem;
+  background: var(--gold); color: #000;
+  font-size: .68rem; font-weight: 800; letter-spacing: .1em;
+  padding: .25rem .65rem; border-radius: 4px; text-transform: uppercase;
+}
+.how-card h3 { font-size: 1.2rem; margin-bottom: .8rem; }
+.how-card p { color: var(--muted2); font-size: .9rem; line-height: 1.7; }
+.how-list { margin-top: .8rem; }
+.how-list li {
+  display: flex; align-items: center; gap: .6rem;
+  color: var(--muted2); font-size: .88rem; padding: .35rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.how-list li:last-child { border-bottom: none; }
+.how-list li::before { content: '✓'; color: var(--gold); font-weight: 700; font-size: .8rem; flex-shrink: 0; }
+
+/* ===== SERVICES ===== */
+.services-bg {
+  background: var(--dark);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.services-header {
+  display: flex; flex-wrap: wrap; align-items: flex-end;
+  justify-content: space-between; gap: 1.5rem; margin-bottom: 3rem;
+}
+.ccyrow {
+  display: flex; align-items: center; gap: .7rem;
+  font-size: .82rem; color: var(--muted2); font-weight: 500;
+}
+.ccyrow select {
+  background: var(--card); color: var(--white);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: .4rem .7rem; font-family: inherit; font-size: .82rem;
+  cursor: pointer;
+}
+.services-grid {
+  display: grid; gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media(min-width:640px) { .services-grid { grid-template-columns: 1fr 1fr; } }
+@media(min-width:1000px) { .services-grid { grid-template-columns: repeat(4, 1fr); } }
+.tier {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.6rem;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+}
+.tier:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+.tier.featured {
+  border-color: var(--gold);
+  background: linear-gradient(160deg, rgba(201,168,76,.1) 0%, var(--card2) 60%);
+}
+.tier.featured::before {
+  content: 'MOST POPULAR';
+  position: absolute; top: 1.2rem; right: -2.2rem;
+  background: var(--gold); color: #000;
+  font-size: .62rem; font-weight: 800; letter-spacing: .1em;
+  padding: .35rem 2.8rem;
+  transform: rotate(35deg);
+}
+.tier-img {
+  width: 100%; height: 185px; border-radius: 10px;
+  overflow: hidden; margin-bottom: 1.2rem; position: relative;
+}
+.tier-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(.85) saturate(1.15);
+  transition: transform .4s ease, filter .4s ease;
+}
+.tier:hover .tier-img img { transform: scale(1.05); filter: brightness(1) saturate(1.2); }
+.tier h3 { font-size: 1.15rem; margin-bottom: .3rem; }
+.tier .dur { color: var(--muted); font-size: .78rem; margin-bottom: 1rem; }
+.tier .price {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 800; color: var(--gold);
+  margin: .5rem 0 1.4rem; line-height: 1;
+}
+.tier-divider { height: 1px; background: var(--border); margin-bottom: 1.2rem; }
+.tier-list { flex: 1; margin-bottom: 1.5rem; }
+.tier-list li {
+  display: flex; align-items: center; gap: .6rem;
+  font-size: .86rem; color: var(--muted2); padding: .38rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.tier-list li:last-child { border-bottom: none; }
+.tier-list li::before { content: '✦'; color: var(--gold); font-size: .6rem; flex-shrink: 0; }
+.price-note { color: var(--muted); font-size: .72rem; margin-top: 1.2rem; text-align: center; }
+
+/* ===== LOOKBOOK ===== */
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media(min-width:768px) {
+  .lookbook-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .lookbook-grid .lb-feat {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+.lb-item {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius);
+  aspect-ratio: 1;
+  background: var(--card);
+  cursor: pointer;
+}
+.lb-item.tall { aspect-ratio: auto; }
+.lb-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .5s ease;
+  filter: brightness(.85);
+}
+.lb-item:hover img { transform: scale(1.06); filter: brightness(1); }
+.lb-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 55%);
+  display: flex; align-items: flex-end;
+  padding: 1.2rem;
+  opacity: 0; transition: opacity .3s ease;
+}
+.lb-item:hover .lb-overlay { opacity: 1; }
+.lb-cap {
+  color: var(--white); font-size: .82rem; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.lb-cap span { display: block; color: var(--gold); font-size: .7rem; margin-top: .2rem; font-weight: 400; }
+
+/* ===== TESTIMONIALS ===== */
+.testimonials-bg {
+  background: var(--dark);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.testi-grid {
+  display: grid; gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media(min-width:768px) { .testi-grid { grid-template-columns: repeat(3, 1fr); } }
+.testi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  position: relative;
+  transition: transform .3s, border-color .3s;
+}
+.testi-card:hover { transform: translateY(-5px); border-color: rgba(201,168,76,.25); }
+.testi-card::before {
+  content: '\201C';
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem; color: rgba(201,168,76,.12);
+  position: absolute; top: .5rem; left: 1.5rem;
+  line-height: 1;
+}
+.testi-stars { color: var(--gold); font-size: .9rem; margin-bottom: 1rem; letter-spacing: .05em; }
+.testi-text { font-size: .95rem; color: var(--muted2); line-height: 1.75; font-weight: 300; }
+.testi-author {
+  display: flex; align-items: center; gap: .85rem;
+  margin-top: 1.5rem; padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+}
+.testi-av {
+  width: 44px; height: 44px; border-radius: 50%;
+  overflow: hidden; flex-shrink: 0;
+  border: 2px solid var(--gold);
+  background: var(--card2);
+}
+.testi-av img { width: 100%; height: 100%; object-fit: cover; }
+.testi-name { font-weight: 700; font-size: .9rem; }
+.testi-loc { color: var(--muted); font-size: .76rem; margin-top: .15rem; }
+
+/* ===== BOOKING ===== */
+.booking-wrap {
+  display: grid; gap: 4rem;
+  grid-template-columns: 1fr;
+}
+@media(min-width:900px) { .booking-wrap { grid-template-columns: 1fr 1.1fr; align-items: start; } }
+.booking-side img {
+  width: 100%; border-radius: var(--radius-lg);
+  aspect-ratio: 4/5; object-fit: cover;
+  display: none;
+}
+@media(min-width:900px) { .booking-side img { display: block; } }
+.booking-form-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+}
+.progress { display: flex; gap: .4rem; margin-bottom: 2.2rem; }
+.progress div { flex: 1; height: 3px; border-radius: 4px; background: var(--border); transition: background .4s; }
+.progress div.done { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+.step { display: none; }
+.step.active { display: block; }
+.step-label {
+  font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: .5rem;
+}
+.step h3 { font-size: 1.3rem; margin-bottom: 1.6rem; font-family: 'Playfair Display', serif; }
+.field { margin-bottom: 1.1rem; }
+.field label { display: block; font-size: .76rem; color: var(--muted); margin-bottom: .4rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+.field input, .field textarea, .field select {
+  width: 100%; background: var(--dark);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: .8rem 1rem; color: var(--white);
+  font-family: 'Inter', sans-serif; font-size: .92rem;
+  transition: border-color .2s;
+}
+.field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--gold); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+.svcopt {
+  display: flex; justify-content: space-between; align-items: center;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 1rem 1.1rem; margin-bottom: .6rem;
+  cursor: pointer; font-size: .9rem;
+  transition: border-color .2s, background .2s;
+}
+.svcopt:hover { border-color: rgba(201,168,76,.4); background: rgba(201,168,76,.04); }
+.svcopt.sel { border-color: var(--gold); background: rgba(201,168,76,.08); color: var(--gold); }
+.svcopt .svc-price { color: var(--muted); font-size: .82rem; }
+.svcopt.sel .svc-price { color: var(--gold); }
+.slots { display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; margin-top: .6rem; }
+.slot {
+  border: 1.5px solid var(--border); border-radius: 8px;
+  padding: .6rem; text-align: center; font-size: .8rem; cursor: pointer;
+  transition: all .2s;
+}
+.slot:hover { border-color: rgba(201,168,76,.4); color: var(--gold); }
+.slot.sel { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 700; }
+.deposit-box {
+  background: rgba(201,168,76,.07); border: 1px solid rgba(201,168,76,.2);
+  border-radius: 10px; padding: 1rem 1.2rem;
+  font-size: .86rem; color: var(--muted2); margin: 1.2rem 0;
+  line-height: 1.65;
+}
+.deposit-box strong { color: var(--gold); }
+.paytabs { display: flex; gap: .6rem; margin-bottom: 1.2rem; }
+.ptab {
+  flex: 1; padding: .65rem; border: 1.5px solid var(--border);
+  border-radius: 8px; background: transparent; color: var(--muted2);
+  font-weight: 600; font-size: .84rem; cursor: pointer;
+  font-family: inherit; transition: all .2s;
+}
+.ptab:hover { border-color: rgba(201,168,76,.4); color: var(--gold); }
+.ptab.sel { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,.07); }
+.stepbtns { display: flex; gap: .8rem; margin-top: 1.5rem; }
+.msg {
+  display: none; background: rgba(201,168,76,.08);
+  border: 1px solid rgba(201,168,76,.3); border-radius: 10px;
+  padding: 1rem 1.2rem; font-size: .88rem;
+  margin-top: 1rem; color: var(--muted2); line-height: 1.65;
+}
+#ownerLink { display: none; font-size: .78rem; color: var(--muted); margin-top: 1rem; cursor: pointer; }
+#ownerPanel { display: none; margin-top: .8rem; }
+
+/* ===== POLICIES ===== */
+.policies-grid {
+  display: grid; gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media(min-width:768px) { .policies-grid { grid-template-columns: repeat(3, 1fr); } }
+.policy-card {
+  padding: 2rem 1.8rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid var(--gold);
+  transition: transform .3s;
+}
+.policy-card:hover { transform: translateY(-4px); }
+.policy-img {
+  width: 100%; height: 180px; border-radius: 10px;
+  overflow: hidden; margin-bottom: 1.2rem;
+}
+.policy-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(.85) saturate(1.15);
+  transition: transform .4s ease, filter .4s ease;
+}
+.policy-card:hover .policy-img img { transform: scale(1.05); filter: brightness(1) saturate(1.2); }
+.policy-card h3 { font-size: 1rem; margin-bottom: .6rem; letter-spacing: .02em; }
+.policy-card p { color: var(--muted2); font-size: .9rem; line-height: 1.65; font-weight: 300; }
+
+/* ===== FOOTER ===== */
+footer {
+  background: #080808;
+  border-top: 1px solid var(--border);
+  padding: 4rem 0 2rem;
+}
+.footer-top {
+  display: grid; gap: 2.5rem;
+  grid-template-columns: 1fr;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+@media(min-width:760px) { .footer-top { grid-template-columns: 1.5fr repeat(3,1fr); } }
+.footer-brand .brand { font-size: 1.1rem; margin-bottom: .6rem; }
+.footer-brand p { color: var(--muted); font-size: .86rem; max-width: 260px; line-height: 1.7; margin-top: .5rem; font-weight: 300; }
+footer h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: .7rem; font-weight: 700; color: var(--muted);
+  letter-spacing: .14em; text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+footer a, footer p {
+  display: block; color: var(--muted2); font-size: .88rem;
+  margin-bottom: .5rem; transition: color .2s; font-weight: 300;
+}
+footer a:hover { color: var(--gold); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.finebar { color: #444; font-size: .75rem; }
+.social-row { display: flex; gap: 1rem; }
+.social-row a {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 8px;
+  border: 1px solid var(--border); color: var(--muted);
+  transition: all .2s; margin-bottom: 0;
+}
+.social-row a svg { width: 16px; height: 16px; fill: currentColor; }
+.social-row a:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ===== SCROLL ANIMATIONS ===== */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0;
+}
+
+/* ===== FLOATING WHATSAPP BUTTON ===== */
+.wa-float {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: #25D366;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,.45);
+  transition: transform .25s ease, box-shadow .25s ease;
+  text-decoration: none;
+}
+.wa-float:hover {
+  transform: scale(1.12) translateY(-3px);
+  box-shadow: 0 8px 30px rgba(37,211,102,.6);
+}
+.wa-float svg { width: 30px; height: 30px; fill: #fff; }
+.wa-float-pulse {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: #25D366; opacity: .4;
+  animation: waPulse 2s ease-out infinite;
+}
+@keyframes waPulse {
+  0% { transform: scale(1); opacity: .4; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header id="mainHeader">
+  <div class="container navrow">
+    <div class="brand">
+      <div class="brand-crown">
+        <img src="logo.png" alt="The Crown Formula Logo">
+      </div>
+    </div>
+    <nav class="navlinks">
+      <a href="#experience">How It Works</a>
+      <a href="#services">Services</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#policies">Policies</a>
+    </nav>
+    <a href="#booking" class="btn btn-gold navcta btn-sm">Book Now</a>
+    <button class="burger" onclick="document.getElementById('mobmenu').classList.toggle('open')">
+      <div class="burger-icon"><span></span><span></span><span></span></div>
+    </button>
+  </div>
+  <div class="mobmenu" id="mobmenu">
+    <a href="#experience" onclick="closeMenu()">How It Works</a>
+    <a href="#services" onclick="closeMenu()">Services</a>
+    <a href="#lookbook" onclick="closeMenu()">Lookbook</a>
+    <a href="#reviews" onclick="closeMenu()">Reviews</a>
+    <a href="#policies" onclick="closeMenu()">Policies</a>
+    <a href="#booking" class="btn btn-gold btn-sm" style="text-align:center;margin-top:.5rem" onclick="closeMenu()">Book Now</a>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="hero.png" alt="African barber at work" loading="eager">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Now Booking — Nairobi & Surroundings
+      </div>
+      <h1>The Crown<br><em>comes to you.</em></h1>
+      <p class="hero-sub">Nairobi's premium mobile barbering service. We bring a professional barber, full setup, and sharp results — to your home, office, or hotel.</p>
+      <div class="hero-ctas">
+        <a href="#booking" class="btn btn-gold">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+          Book Your Session
+        </a>
+        <a href="#lookbook" class="btn btn-outline">See the Work</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">500+</div>
+          <div class="hero-stat-lbl">Happy Clients</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">5.0★</div>
+          <div class="hero-stat-lbl">Average Rating</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">3 yrs</div>
+          <div class="hero-stat-lbl">In Business</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span>Premium Mobile Barbering</span><span class="dot">✦</span>
+    <span>Home &amp; Hotel Visits</span><span class="dot">✦</span>
+    <span>Weddings &amp; Group Bookings</span><span class="dot">✦</span>
+    <span>Sterile Clean Tools</span><span class="dot">✦</span>
+    <span>5-Star Rated</span><span class="dot">✦</span>
+    <span>Nairobi &amp; Beyond</span><span class="dot">✦</span>
+    <span>Premium Mobile Barbering</span><span class="dot">✦</span>
+    <span>Home &amp; Hotel Visits</span><span class="dot">✦</span>
+    <span>Weddings &amp; Group Bookings</span><span class="dot">✦</span>
+    <span>Sterile Clean Tools</span><span class="dot">✦</span>
+    <span>5-Star Rated</span><span class="dot">✦</span>
+    <span>Nairobi &amp; Beyond</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="section" id="experience">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">How It Works</span>
+      <h2 class="section-title">Simple. Clean. On time.</h2>
+      <p class="section-sub">Three steps from booking to fresh cut — no travel, no waiting, no hassle.</p>
+    </div>
+    <div class="how-wrap" style="margin-top:3rem">
+      <div class="how-card reveal">
+        <div class="how-num">01</div>
+        <div class="how-icon">
+          <img src="Coverage.png" alt="Mobile barber location coverage">
+          <div class="how-icon-num">Coverage</div>
+        </div>
+        <h3>Where We Go</h3>
+        <p>We travel directly to you anywhere in our coverage area. Enter your address at booking to confirm we can reach you.</p>
+        <ul class="how-list">
+          <li>Homes & apartments</li>
+          <li>Hotels & Airbnbs</li>
+          <li>Offices & events</li>
+        </ul>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">02</div>
+        <div class="how-icon">
+          <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&h=360&q=80&auto=format&fit=crop" alt="Professional barber tools and setup">
+          <div class="how-icon-num">Setup</div>
+        </div>
+        <h3>What We Bring</h3>
+        <p>We arrive fully equipped. You don't need to prepare a thing.</p>
+        <ul class="how-list">
+          <li>Portable barber chair</li>
+          <li>Fresh floor mat, every visit</li>
+          <li>Professional lighting</li>
+          <li>Sanitised tools, before & after</li>
+        </ul>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">03</div>
+        <div class="how-icon">
+          <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&h=360&q=80&auto=format&fit=crop" alt="Client ready for haircut">
+          <div class="how-icon-num">You're Ready</div>
+        </div>
+        <h3>Before We Arrive</h3>
+        <p>Keep it simple on your end — just have these three things ready.</p>
+        <ul class="how-list">
+          <li>Clean, dry hair</li>
+          <li>One power outlet nearby</li>
+          <li>A clear 6 × 6 ft space</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- ===== SERVICES ===== -->
+<section class="section services-bg" id="services">
+  <div class="container">
+    <div class="services-header reveal">
+      <div>
+        <span class="eyebrow">Services &amp; Pricing</span>
+        <h2 class="section-title">Pick what you need.</h2>
+      </div>
+      <div class="ccyrow">
+        Show prices in
+        <select id="currencySel" onchange="applyCurrency(this.value)">
+          <option value="KES">KES — Sh</option>
+          <option value="USD">USD — $</option>
+          <option value="EUR">EUR — €</option>
+          <option value="GBP">GBP — £</option>
+          <option value="CAD">CAD — $</option>
+          <option value="AUD">AUD — $</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="services-grid">
+      <div class="tier featured reveal">
+        <div class="tier-img">
+          <img src="hero.png" alt="Full Package barber service">
+        </div>
+        <h3>The Full Package</h3>
+        <p class="dur">Full service · 90 min</p>
+        <div class="price" data-kes="1500">KSh 1,500</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-list">
+          <li>Haircut of your choice</li>
+          <li>Beard trim &amp; line-up</li>
+          <li>Hot towel treatment</li>
+          <li>Facial steam</li>
+          <li>Straight razor finish</li>
+          <li>Premium aftershave</li>
+        </ul>
+        <button class="btn btn-gold btn-full" onclick="bookService('The Full Package')">Book This →</button>
+      </div>
+
+      <div class="tier reveal">
+        <div class="tier-img">
+          <img src="Fade and Taper.png" alt="Fade and Taper haircut">
+        </div>
+        <h3>Fade &amp; Taper</h3>
+        <p class="dur">Classic cut · 45 min</p>
+        <div class="price" data-kes="1000">KSh 1,000</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-list">
+          <li>Skin fade or taper</li>
+          <li>Razor sharp edge-up</li>
+          <li>Styling finish</li>
+        </ul>
+        <button class="btn btn-outline btn-full" onclick="bookService('Fade & Taper')">Book This →</button>
+      </div>
+
+      <div class="tier reveal">
+        <div class="tier-img">
+          <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&h=320&q=80&auto=format&fit=crop" alt="Beard trim service">
+        </div>
+        <h3>Beard Trim</h3>
+        <p class="dur">Beard only · 30 min</p>
+        <div class="price" data-kes="500">KSh 500</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-list">
+          <li>Beard wash</li>
+          <li>Shape &amp; line-up</li>
+          <li>Conditioning oil</li>
+        </ul>
+        <button class="btn btn-outline btn-full" onclick="bookService('Beard Trim')">Book This →</button>
+      </div>
+
+      <div class="tier reveal">
+        <div class="tier-img">
+          <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600&h=320&q=80&auto=format&fit=crop" alt="Group booking barbering">
+        </div>
+        <h3>Group Booking</h3>
+        <p class="dur">Weddings · Shoots · Teams</p>
+        <div class="price">Custom</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-list">
+          <li>Multiple clients, one visit</li>
+          <li>Extra barbers if needed</li>
+          <li>Priority scheduling</li>
+        </ul>
+        <button class="btn btn-outline btn-full" onclick="bookService('Group Booking')">Get a Quote →</button>
+      </div>
+    </div>
+    <p class="price-note">Prices are set in Kenyan Shillings. Other currencies are estimates at current exchange rates.</p>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- ===== LOOKBOOK ===== -->
+<section class="section" id="lookbook">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:3rem">
+      <span class="eyebrow">Lookbook</span>
+      <h2 class="section-title">The Crown Standard.</h2>
+      <p class="section-sub" style="margin:0 auto">Every client leaves looking like royalty. Here's proof.</p>
+    </div>
+
+    <div class="lookbook-grid">
+      <div class="lb-item lb-feat tall reveal">
+        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=900&q=80&auto=format&fit=crop" alt="Premium skin fade" loading="lazy">
+        <div class="lb-overlay">
+          <div class="lb-cap">Skin Fade <span>Signature cut</span></div>
+        </div>
+      </div>
+      <div class="lb-item reveal">
+        <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&q=80&auto=format&fit=crop" alt="Beard grooming" loading="lazy">
+        <div class="lb-overlay">
+          <div class="lb-cap">Beard Trim <span>Clean & sharp</span></div>
+        </div>
+      </div>
+      <div class="lb-item reveal">
+        <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=600&q=80&auto=format&fit=crop" alt="Textured crop" loading="lazy">
+        <div class="lb-overlay">
+          <div class="lb-cap">Textured Crop <span>Modern style</span></div>
+        </div>
+      </div>
+      <div class="lb-item reveal">
+        <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80&auto=format&fit=crop" alt="Line up" loading="lazy">
+        <div class="lb-overlay">
+          <div class="lb-cap">Line Up <span>Razor precise</span></div>
+        </div>
+      </div>
+      <div class="lb-item reveal">
+        <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600&q=80&auto=format&fit=crop" alt="Taper fade" loading="lazy">
+        <div class="lb-overlay">
+          <div class="lb-cap">Taper Fade <span>Clean finish</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="section testimonials-bg" id="reviews">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:3rem">
+      <span class="eyebrow">Client Reviews</span>
+      <h2 class="section-title">What the streets are saying.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"On time, clean setup, no mess left behind. Best cut I've had at home. These guys are the real deal — felt like a VIP barbershop experience."</p>
+        <div class="testi-author">
+          <div class="testi-av">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80&auto=format&fit=crop&crop=face" alt="Marcus O." loading="lazy">
+          </div>
+          <div>
+            <div class="testi-name">Marcus O.</div>
+            <div class="testi-loc">Home Booking, Westlands</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Booked for six groomsmen the morning of my wedding. Everyone looked sharp, on schedule, no stress. Absolutely worth every shilling."</p>
+        <div class="testi-author">
+          <div class="testi-av">
+            <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=100&q=80&auto=format&fit=crop&crop=face" alt="Devon R." loading="lazy">
+          </div>
+          <div>
+            <div class="testi-name">Devon R.</div>
+            <div class="testi-loc">Group Booking, Karen</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Felt like a real barbershop, just in my hotel room. Super easy to book, professional service, and the finish was cleaner than anything I get back home."</p>
+        <div class="testi-author">
+          <div class="testi-av">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80&auto=format&fit=crop&crop=face" alt="Aaron K." loading="lazy">
+          </div>
+          <div>
+            <div class="testi-name">Aaron K.</div>
+            <div class="testi-loc">Hotel Booking, CBD</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- ===== BOOKING ===== -->
+<section class="section" id="booking">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:3rem">
+      <span class="eyebrow">Book Your Session</span>
+      <h2 class="section-title">Ready for the Crown treatment?</h2>
+      <p class="section-sub" style="margin:0 auto">Fill in the form below. Takes less than 2 minutes.</p>
+    </div>
+
+    <div class="booking-wrap">
+      <div class="booking-side reveal">
+        <img src="hero.png" alt="Barber at work" loading="lazy">
+      </div>
+
+      <div class="booking-form-wrap reveal">
+        <div class="progress">
+          <div class="done" id="pg1"></div>
+          <div id="pg2"></div>
+          <div id="pg3"></div>
+          <div id="pg4"></div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step active" data-step="1">
+          <div class="step-label">Step 1 of 4</div>
+          <h3>Choose a service</h3>
+          <div class="svcopt" onclick="selService(this,'The Full Package')">
+            <span>The Full Package</span>
+            <span class="svc-price amt" data-kes="1500">KSh 1,500</span>
+          </div>
+          <div class="svcopt" onclick="selService(this,'Fade & Taper')">
+            <span>Fade &amp; Taper</span>
+            <span class="svc-price amt" data-kes="1000">KSh 1,000</span>
+          </div>
+          <div class="svcopt" onclick="selService(this,'Beard Trim')">
+            <span>Beard Trim</span>
+            <span class="svc-price amt" data-kes="500">KSh 500</span>
+          </div>
+          <div class="svcopt" onclick="selService(this,'Group Booking')">
+            <span>Group Booking</span>
+            <span class="svc-price">Custom</span>
+          </div>
+          <div class="stepbtns">
+            <button class="btn btn-gold btn-full" onclick="nextStep(1)">Continue →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step" data-step="2">
+          <div class="step-label">Step 2 of 4</div>
+          <h3>Your details</h3>
+          <div class="row2">
+            <div class="field"><label>Full Name</label><input id="f-name" type="text" placeholder="Your name"></div>
+            <div class="field"><label>Phone</label><input id="f-phone" type="tel" placeholder="07XXXXXXXX"></div>
+          </div>
+          <div class="field"><label>Address</label><input id="f-addr" type="text" placeholder="Street, neighbourhood, city"></div>
+          <div class="field"><label>Notes (optional)</label><textarea id="f-notes" rows="2" placeholder="Gate code, floor, parking notes…"></textarea></div>
+          <div class="stepbtns">
+            <button class="btn btn-outline" onclick="prevStep(2)">← Back</button>
+            <button class="btn btn-gold" style="flex:1" onclick="nextStep(2)">Continue →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" data-step="3">
+          <div class="step-label">Step 3 of 4</div>
+          <h3>Date &amp; time</h3>
+          <div class="field"><label>Preferred Date</label><input id="f-date" type="date"></div>
+          <div class="field">
+            <label>Available Time Slots</label>
+            <div class="slots">
+              <div class="slot" onclick="selSlot(this)">9:00 AM</div>
+              <div class="slot" onclick="selSlot(this)">11:30 AM</div>
+              <div class="slot" onclick="selSlot(this)">1:00 PM</div>
+              <div class="slot" onclick="selSlot(this)">3:30 PM</div>
+              <div class="slot" onclick="selSlot(this)">5:00 PM</div>
+              <div class="slot" onclick="selSlot(this)">7:00 PM</div>
+            </div>
+          </div>
+          <div class="stepbtns">
+            <button class="btn btn-outline" onclick="prevStep(3)">← Back</button>
+            <button class="btn btn-gold" style="flex:1" onclick="nextStep(3)">Continue →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step" data-step="4">
+          <div class="step-label">Step 4 of 4</div>
+          <h3>Confirm &amp; pay deposit</h3>
+          <p id="sumService" style="font-size:.9rem;color:var(--muted2)">Service: —</p>
+          <div class="deposit-box">
+            <strong>30% deposit</strong> required to confirm your booking. This is non-refundable. The remaining balance is due on arrival.
+          </div>
+          <div class="paytabs">
+            <button type="button" class="ptab sel" onclick="setPayTab('mpesa',this)">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:middle;margin-right:5px"><path d="M17 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2zm-5 18a1 1 0 110-2 1 1 0 010 2zm5-4H7V4h10v12z"/></svg>
+              M-Pesa
+            </button>
+            <button type="button" class="ptab" onclick="setPayTab('paypal',this)">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align:middle;margin-right:5px"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+              PayPal
+            </button>
+          </div>
+          <div id="pay-mpesa">
+            <div class="field">
+              <label>M-Pesa Phone Number</label>
+              <input id="f-mpphone" type="tel" placeholder="07XXXXXXXX">
+            </div>
+            <button class="btn btn-gold btn-full" onclick="payMpesa()">Send M-Pesa Prompt →</button>
+            <p style="color:var(--muted);font-size:.78rem;margin-top:.7rem">You'll receive a prompt on your phone to enter your M-Pesa PIN.</p>
+          </div>
+          <div id="pay-paypal" style="display:none">
+            <form id="paypalForm" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" onsubmit="saveBooking('paypal')">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="lewischarleskamau@gmail.com">
+              <input type="hidden" name="item_name" id="pp-item" value="">
+              <input type="hidden" name="amount" id="pp-amount" value="">
+              <input type="hidden" name="currency_code" value="USD">
+              <input type="hidden" name="no_shipping" value="1">
+              <button type="submit" class="btn btn-gold btn-full">Pay with PayPal →</button>
+            </form>
+            <p style="color:var(--muted);font-size:.78rem;margin-top:.7rem">Opens PayPal in a new tab. Deposit is charged in USD.</p>
+          </div>
+          <div class="msg" id="bookMsg"></div>
+          <div class="stepbtns">
+            <button class="btn btn-outline btn-full" onclick="prevStep(4)">← Back</button>
+          </div>
+          <a href="#" id="ownerLink" onclick="loadBookings();return false">View submitted bookings</a>
+          <div id="ownerPanel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- ===== POLICIES ===== -->
+<section class="section" id="policies">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:3rem">
+      <span class="eyebrow">Our Policies</span>
+      <h2 class="section-title">Transparent &amp; fair.</h2>
+    </div>
+    <div class="policies-grid">
+      <div class="policy-card reveal">
+        <div class="policy-img">
+          <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&h=280&q=80&auto=format&fit=crop&crop=top" alt="Barber giving clean shave deposit">
+        </div>
+        <h3>Deposit Policy</h3>
+        <p>A 30% non-refundable deposit is required to secure your booking slot. This guarantees your barber's time and travel.</p>
+      </div>
+      <div class="policy-card reveal">
+        <div class="policy-img">
+          <img src="https://images.unsplash.com/photo-1622288432450-277d0fef5ed6?w=600&h=280&q=80&auto=format&fit=crop" alt="Straight razor shave cancellation">
+        </div>
+        <h3>Cancellations</h3>
+        <p>Need to reschedule? No problem — do it up to 24 hours before your appointment at no charge. Late cancellations forfeit the deposit.</p>
+      </div>
+      <div class="policy-card reveal">
+        <div class="policy-img">
+          <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600&h=280&q=80&auto=format&fit=crop" alt="Barber travelling to client">
+        </div>
+        <h3>Travel</h3>
+        <p>Travel is included within our standard coverage area. Locations outside the zone may carry a small travel fee, confirmed at booking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-crown" style="width:90px;height:90px;">
+            <img src="logo.png" alt="The Crown Formula Logo">
+          </div>
+        </div>
+        <p>Nairobi's premium mobile barbering service. We bring the barbershop to you — clean, sharp, and on time.</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="https://wa.me/254718371077?text=Hi%2C%20I'd%20like%20to%20book%20a%20session." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align:middle;margin-right:6px;color:var(--gold)"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          +254 718 371 077
+        </a>
+        <a href="https://wa.me/254718371077" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align:middle;margin-right:6px;color:var(--gold)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp Us
+        </a>
+        <a href="mailto:book@thecrownformula.com">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align:middle;margin-right:6px;color:var(--gold)"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          book@thecrownformula.com
+        </a>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <p>Monday – Saturday</p>
+        <p>9:00 AM – 9:00 PM</p>
+        <p style="margin-top:.5rem">Sunday: by appointment</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <a href="#services">Services &amp; Pricing</a>
+        <a href="#lookbook">Lookbook</a>
+        <a href="#booking">Book Now</a>
+        <a href="#policies">Policies</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="finebar">© 2026 The Crown Formula. All rights reserved. Nairobi, Kenya.</p>
+      <div class="social-row">
+        <a href="#" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok" title="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </a>
+        <a href="https://wa.me/254718371077" aria-label="WhatsApp" title="WhatsApp" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== FLOATING WHATSAPP BUTTON ===== -->
+<a href="https://wa.me/254718371077?text=Hi%2C%20I'd%20like%20to%20book%20a%20session%20with%20The%20Crown%20Formula." 
+   class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <div class="wa-float-pulse"></div>
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+/* ===== CURRENCY ===== */
+const RATES = { KES: 129, USD: 1, EUR: 0.91, GBP: 0.75, CAD: 1.36, AUD: 1.50 };
+function fmt(kes, code) {
+  const usdEq = parseFloat(kes) / RATES.KES;
+  const v = usdEq * RATES[code];
+  try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: code, maximumFractionDigits: 0 }).format(v); }
+  catch(e) { return code + ' ' + Math.round(v); }
+}
+function applyCurrency(code) {
+  document.querySelectorAll('.price[data-kes]').forEach(el => { el.textContent = fmt(el.dataset.kes, code); });
+  document.querySelectorAll('.amt[data-kes]').forEach(el => { el.textContent = fmt(el.dataset.kes, code); });
+  try { localStorage.setItem('ctf_currency', code); } catch(e) {}
+}
+function detectCurrency() {
+  try {
+    const loc = navigator.language || 'en-KE';
+    const region = (loc.split('-')[1] || '').toUpperCase();
+    const map = { KE: 'KES', GB: 'GBP', CA: 'CAD', AU: 'AUD', US: 'USD' };
+    const eur = ['DE','FR','ES','IT','NL','IE','PT','AT','BE','FI','GR'];
+    if (map[region]) return map[region];
+    if (eur.includes(region)) return 'EUR';
+  } catch(e) {}
+  return 'KES';
+}
+(function() {
+  let saved = null;
+  try { saved = localStorage.getItem('ctf_currency'); } catch(e) {}
+  const code = saved || detectCurrency();
+  const sel = document.getElementById('currencySel');
+  if (sel) sel.value = code;
+  applyCurrency(code);
+})();
+
+/* ===== NAVBAR SCROLL ===== */
+const header = document.getElementById('mainHeader');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+/* ===== MOBILE MENU ===== */
+function closeMenu() { document.getElementById('mobmenu').classList.remove('open'); }
+
+/* ===== BOOKING ===== */
+function selService(el, name) {
+  document.querySelectorAll('.svcopt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  window.__svc = name;
+}
+function selSlot(el) {
+  document.querySelectorAll('.slot').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function nextStep(n) {
+  if (n === 1 && !window.__svc) { alert('Please choose a service first.'); return; }
+  if (n === 2 && (!document.getElementById('f-name').value || !document.getElementById('f-phone').value || !document.getElementById('f-addr').value)) {
+    alert('Please fill in your name, phone number, and address.'); return;
+  }
+  document.querySelector('.step[data-step="' + n + '"]').classList.remove('active');
+  document.querySelector('.step[data-step="' + (n + 1) + '"]').classList.add('active');
+  for (let i = 1; i <= 4; i++) { document.getElementById('pg' + i).classList.toggle('done', i <= n + 1); }
+  if (n + 1 === 4) {
+    document.getElementById('sumService').textContent = 'Service: ' + (window.__svc || '—');
+    document.getElementById('f-mpphone').value = document.getElementById('f-phone').value;
+    updatePaypalLink();
+  }
+  document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+}
+function prevStep(n) {
+  document.querySelector('.step[data-step="' + n + '"]').classList.remove('active');
+  document.querySelector('.step[data-step="' + (n - 1) + '"]').classList.add('active');
+  for (let i = 1; i <= 4; i++) { document.getElementById('pg' + i).classList.toggle('done', i <= n - 1); }
+}
+function bookService(name) {
+  window.__svc = name;
+  document.querySelectorAll('.svcopt').forEach(o => { o.classList.toggle('sel', o.textContent.trim().indexOf(name) >= 0); });
+  for (let i = 2; i <= 4; i++) { document.querySelector('.step[data-step="' + i + '"]').classList.remove('active'); }
+  document.querySelector('.step[data-step="1"]').classList.add('active');
+  for (let i = 1; i <= 4; i++) { document.getElementById('pg' + i).classList.toggle('done', i === 1); }
+  document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+}
+function depositAmount() {
+  const base = { 'The Full Package': 1500, 'Fade & Taper': 1000, 'Beard Trim': 500 }[window.__svc] || 0;
+  return Math.round(base * 0.3);
+}
+function setPayTab(t, btn) {
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById('pay-mpesa').style.display = t === 'mpesa' ? 'block' : 'none';
+  document.getElementById('pay-paypal').style.display = t === 'paypal' ? 'block' : 'none';
+}
+const MPESA_ENDPOINT = '';
+function updatePaypalLink() {
+  const amtKes = depositAmount(), amtUsd = (amtKes / RATES.KES).toFixed(2);
+  document.getElementById('pp-amount').value = amtUsd;
+  document.getElementById('pp-item').value = 'Deposit - ' + (window.__svc || 'Booking');
+}
+async function payMpesa() {
+  const phone = document.getElementById('f-mpphone').value;
+  if (!phone) { alert('Please enter the phone number to receive the M-Pesa prompt.'); return; }
+  const box = document.getElementById('bookMsg');
+  box.style.display = 'block';
+  if (MPESA_ENDPOINT) {
+    try {
+      await fetch(MPESA_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: phone, amount: depositAmount() }) });
+      box.textContent = '✅ Check your phone for the M-Pesa prompt to complete your deposit.';
+    } catch(e) {
+      box.textContent = '⚠️ Could not reach the payment service — please try again or contact us on WhatsApp.';
+    }
+  } else {
+    box.innerHTML = '<strong style="color:var(--gold)">Manual M-Pesa:</strong> Open M-Pesa → Send Money → Enter KSh ' + depositAmount() + ' to <strong>0718 371 077</strong> (Pochi la Biashara). Then <a href="https://wa.me/254718371077?text=Hi%2C%20I%20just%20sent%20my%20M-Pesa%20deposit%20for%20' + encodeURIComponent(window.__svc || 'booking') + '" target="_blank" style="color:var(--gold);text-decoration:underline">send us your confirmation code on WhatsApp</a>.';
+  }
+  await saveBooking('mpesa', phone);
+}
+let DB = null, USER = null;
+(async function() {
+  try { if (typeof claude !== 'undefined') { DB = await claude.use('db'); USER = await claude.use('user'); } } catch(e) {}
+  try { if (USER && USER.isOwner && USER.isOwner()) { document.getElementById('ownerLink').style.display = 'inline-block'; } } catch(e) {}
+})();
+async function saveBooking(method, payPhone) {
+  const name = document.getElementById('f-name').value, phone = document.getElementById('f-phone').value, addr = document.getElementById('f-addr').value;
+  const data = { service: window.__svc || '', name, phone, address: addr, notes: document.getElementById('f-notes').value, date: document.getElementById('f-date').value, time: (document.querySelector('.slot.sel') || {}).textContent || '', depositKes: depositAmount(), paymentMethod: method, payPhone: payPhone || '', createdAt: Date.now() };
+  try { if (DB) { await DB.doc('bookings/bk_' + Date.now()).set(data); } } catch(e) {}
+}
+async function loadBookings() {
+  const panel = document.getElementById('ownerPanel');
+  panel.style.display = 'block'; panel.textContent = 'Loading…';
+  try {
+    const snap = await DB.collection('bookings').orderBy('createdAt', 'desc').limit(30).get();
+    const docs = snap.docs || snap || [];
+    panel.innerHTML = docs.map(function(d) {
+      const b = d.data ? d.data() : d;
+      return '<div style="border-top:1px solid var(--border);padding:.55rem 0;font-size:.82rem">' + (b.service || '') + ' — ' + (b.name || '') + ' · ' + (b.phone || '') + ' · ' + (b.date || '') + ' ' + (b.time || '') + ' · KSh ' + (b.depositKes || 0) + ' via ' + (b.paymentMethod || '') + '</div>';
+    }).join('') || 'No bookings yet.';
+  } catch(e) { panel.textContent = 'Could not load bookings.'; }
+}
+
+/* ===== SCROLL REVEAL ===== */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
