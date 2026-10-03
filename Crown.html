@@ -313,13 +313,14 @@ header.scrolled {
   border-color: var(--gold);
   background: linear-gradient(160deg, rgba(201,168,76,.1) 0%, var(--card2) 60%);
 }
-.tier.featured::before {
-  content: 'MOST POPULAR';
-  position: absolute; top: 1.2rem; right: -2.2rem;
-  background: var(--gold); color: #000;
-  font-size: .62rem; font-weight: 800; letter-spacing: .1em;
-  padding: .35rem 2.8rem;
-  transform: rotate(35deg);
+.tier.featured::before { display: none; }
+.tier-popular-badge {
+  position: absolute; top: 1rem; left: 1rem; z-index: 10;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #000; font-size: .65rem; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: .35rem .9rem; border-radius: 50px;
+  box-shadow: 0 4px 14px rgba(201,168,76,.45);
 }
 .tier-img {
   width: 100%; height: 185px; border-radius: 10px;
@@ -831,6 +832,7 @@ footer a:hover { color: var(--gold); }
       <div class="tier featured reveal">
         <div class="tier-img">
           <img src="hero.png" alt="Full Package barber service">
+          <div class="tier-popular-badge">★ Most Popular</div>
         </div>
         <h3>The Full Package</h3>
         <p class="dur">Full service · 90 min</p>
